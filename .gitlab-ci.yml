@@ -1,0 +1,37 @@
+image: docker:latest
+
+services:
+  - mcr.microsoft.com/dotnet/core/sdk:3.1
+  
+stages:
+  - build
+  - deploy
+
+variables:
+  backendFolder: "Vivlio"
+
+#Build
+build:
+  before_script:
+    - cd $backendFolder
+    - dotnet restore
+
+  stage: build
+  script:
+    - dotnet build
+
+
+#Deploy Backend
+deploy-backend:
+  stage: deploy
+
+  before_script:
+    - docker login -u jensevent -p Welkom12345 
+
+  script:
+    - docker build -t jensevent/vivlio:latest -f $backendFolder/Dockerfile .
+    - docker tag jensevent/vivlio:latest jensevent/vivlio
+    - docker push jensevent/vivlio
+
+  after_script:
+    - docker logout

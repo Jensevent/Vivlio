@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewData["Title"] = "Registreren";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css">
+<title>Registreren - Vivlio</title>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <img src="~/img/Vivlio logo.png" style="height:100px; margin:auto; display:block;" />
+                        <h5 class="card-title text-center">Registreren</h5>
+                        <form class="form-signin" asp-controller="User" asp-action="Register">
+                            <div class="form-label-group register" style="">
+                                Je naam mag alleen letters bevatten.
+                                Je gebruikersnaam moet minstens uit 4 tekens bevatten, waarvan minimaal 1 letter.
+                                De email moet in het juiste format zijn en je telefoon nummer mag maximaal 10 cijfers bevatten.
+                                Je moet minstens 6 jaar oud zijn en het wachtwoord moet minstens uit 8 tekens bestaan, waarvan 1 hoofdletter en 1 cijfer.
+                            </div>
+
+                            <div class="form-label-group">
+                                <i> *verplicht</i>
+                                <p style="color: red;"> @Html.ValidationMessage("Alert") </p>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="text" id="Name" name="Name" class="form-control" placeholder="Roepnaam*" required autofocus>
+                                <label for="Name">Roepnaam*</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="text" id="Username" name="Username" class="form-control" placeholder="Gebruikersnaam*" required>
+                                <label for="Username">Gebruikersnaam*</label>
+                            </div>
+                            
+                            @*<div class="form-label-group">
+                                <select name="userFunction" id="userFunction" class="form-control" style="border-radius:2rem; height:50px;">
+                                    <option value="Member">Lid </option>
+                                    <option value="Employee"> Medewerker</option>
+                                </select>
+                            </div>*@
+                            
+                            <div class="form-label-group">
+                                <input type="date" id="BirthDate" name="BirthDate" class="form-control" placeholder="Geboortedatum*" required>
+                                <label for="BirthDate">Geboortedatum*</label>
+                            </div>
+
+
+                            <div class="form-label-group">
+                                <input type="email" id="Email" name="Email" class="form-control" placeholder="Email*" required>
+                                <label for="Email">Email*</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="tel" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Telefoonnummer" maxlength="10">
+                                <label for="PhoneNumber">Telefoonnummer</label>
+                            </div>
+
+
+                            <div class="form-label-group">
+                                <input type="password" id="Password" name="Password" class="form-control" placeholder="Wachtwoord*" required>
+                                <label for="Password">Wachtwoord*</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" id="RepeatPassword" name="RepeatPassword" class="form-control" placeholder="Herhaal het wachtwoord*" required>
+                                <label for="RepeatPassword">Herhaal het wachtwoord*</label>
+                            </div>
+
+
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Registreer</button>
+                            <hr class="my-4">
+                            <button class="btn btn-lg btn-google btn-block text-uppercase" type="button"  onclick="@("window.location.href='" + @Url.Action("LoginView", "User") + "'");"   > Heb je al een account?</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

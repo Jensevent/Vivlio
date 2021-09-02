@@ -1,0 +1,62 @@
+﻿
+@{
+    Layout = null;
+    ViewData["Title"] = "Inloggen";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css">
+<title>Inloggen - Vivlio</title>
+
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <img src="~/img/Vivlio logo.png" style="height:100px; margin:auto; display:block;" />
+                        <h5 class="card-title text-center">Inloggen</h5>
+                        <form class="form-signin" asp-controller="User" asp-action="Login">
+
+
+                            @{ Vivlio.Tools.Databasehandler dbh = new Vivlio.Tools.Databasehandler();
+
+                                if (!dbh.TestCon())
+                                {
+                                    <div class="alert alert-warning" role="alert">
+                                        <strong>Waarschuwing!</strong> Zet je vpn aan!
+                                    </div>
+                                }
+                            }
+
+
+
+                            <div class="form-label-group">
+                                <span style="color: red;"> @Html.ValidationMessage("Alert") </span>
+                            </div>
+
+
+
+                            <div class="form-label-group">
+                                <input type="text" id="Username" name="Username" class="form-control" placeholder="Gebruikersnaam" required autofocus>
+                                <label for="Username">Gebruikersnaam</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" id="Password" name="Password" class="form-control" placeholder="Wachtwoord" required>
+                                <label for="Password">Wachtwoord</label>
+                            </div>
+
+
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Login</button>
+                            <hr class="my-4">
+                            <button class="btn btn-lg btn-google btn-block text-uppercase" type="button" onclick="@("window.location.href='" + @Url.Action("RegisterView", "User") + "'");">Creeër een account</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

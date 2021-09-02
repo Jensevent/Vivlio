@@ -1,0 +1,148 @@
+﻿@using System.Data
+
+@{
+    ViewData["Title"] = "Profiel";
+}
+
+
+<style>
+    .Alphabet {
+        overflow: scroll;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .form-control {
+        width: 50%;
+    }
+</style>
+
+<h1>Profiel</h1>
+
+<span style="color: red; display:block;">   @Html.ValidationMessage("Alert") </span>
+<span style="color: green; display:block;"> @Html.ValidationMessage("Succes")</span>
+
+<strong> Roepnaam: </strong> @Model.Name
+<br />
+<strong> Gebruikersnaam: </strong> @Model.Username
+<br />
+<strong> Email: </strong> @Model.Email
+<br />
+
+@{
+    if (!String.IsNullOrEmpty(Model.Phonenumber))
+    {
+        <strong> Telefoonnummer: </strong> @Model.Phonenumber.ToString()
+        <br />
+    }
+}
+<strong> Functie: </strong> @Model.UserFunction
+<br />
+<button type="button" class="btn btn-primary btn-rounded" style="border-radius:2rem; margin-top:10px;" onclick="@("window.location.href='" + @Url.Action("ChangeAccountInfoView", "Account") + "'");" >Wijzig gegevens </button>
+<br />
+
+
+
+
+
+@{
+    Vivlio.Containers.UserContainer userContainer = new Vivlio.Containers.UserContainer(new Vivlio.DAL_s.UserDAL());
+
+    var table = userContainer.GetUserBooks(Model.Username);
+
+}
+
+<h3>Geleende boeken:</h3>
+
+<div id="partial"></div>
+
+@{string name = "Books";}
+
+@{
+    @if (table.Rows.Count != 0)
+    {
+        <input type="text" id="search_@name" placeholder="Boek ID" name="Zoeken.." class="form-control" />
+
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table table-bordered table-striped mb-0 tablewidth" id="@name">
+                <thead>
+                    <tr class="topRow">
+                        <th scope="col">@table.Columns[0].Caption</th>
+                        <th scope="col">@table.Columns[1].Caption</th>
+                        <th scope="col">@table.Columns[2].Caption</th>
+                        <th scope="col">@table.Columns[3].Caption</th>
+                        <th scope="col"> Verlengen</th>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in table.Rows)
+                    {
+                        DateTime date = (DateTime)row[3];
+                        <tr scope="row">
+                            <td class="ID">@row[0].ToString()</td>
+                            <td>@row[1].ToString()</td>
+                            <td>@row[2].ToString()</td>
+                            <td>@date.ToShortDateString()</td>
+
+                            @if ((DateTime)row[3] > DateTime.Now)
+                            {
+                                <td>  <button type="button" class="use-address"> Boek verlengen</button> </td>
+                            }
+                            else
+                            {
+                                <td class="red"> Dit boek is te laat! </td>
+                            }
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <br />
+        <span>Je hebt geen boeken uitgeleend!</span>
+    }
+}
+
+
+<script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+
+<script type="text/javascript">
+$("#search_@name").on("keyup", function () {
+    var value = $(this).val();
+    $("#@name tr").each(function (index) {
+        if (index !== 0) {
+            $row = $(this);
+            var id = $row.find("td").eq(0).text();
+            var idTwo = $row.find("td").eq(1).text();
+
+            if (id.indexOf(value) !== 0 && idTwo.indexOf(value) !== 0) {
+                $row.hide();
+            }
+            else {
+                $row.show();
+            }
+        }
+    });
+});
+
+$(".use-address").click(function() {
+    var $row = $(this).closest("tr");    // Find the row
+    var $text = $row.find(".ID").text(); // Find the text
+
+    var url = '@Url.Action("ProlongBookResult", "Book")';
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { 'userID':@Model.ID, 'bookID': $text },
+    }).done(function (r) {
+        $('#partial').html(r);
+
+    }).fail(function (e) {
+        console.log(e.responseText);
+    });
+});
+</script>
+

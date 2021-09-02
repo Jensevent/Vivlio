@@ -1,0 +1,80 @@
+﻿@using System.Data
+
+@model System.Data.DataTable
+@* PARTIAL VIEW *@
+
+
+
+<style>
+    .my-custom-scrollbar {
+        position: relative;
+        height: 180px;
+        overflow: auto;
+        width:98%;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>
+
+
+@{
+    string name = ViewData["Name"] as System.String;
+}
+
+
+@if (Model.Rows.Count != 0)
+{
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table table-bordered table-striped mb-0" id="@name">
+            <thead>
+                <tr class="topRow">
+                    <th scope="col">@Model.Columns[0].Caption</th>
+                    <th scope="col">@Model.Columns[1].Caption</th>
+                    <th scope="col">@Model.Columns[2].Caption</th>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.Rows)
+                {
+                    <tr scope="row">
+                        <td>@row[0].ToString()</td>
+                        <td>@row[1].ToString()</td>
+                        <td>@row[2].ToString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+
+<script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+
+$("#search_@name").on("keyup", function () {
+    var value = $(this).val();
+    $("#@name tr").each(function (index) {
+        if (index !== 0) {
+            $row = $(this);
+            var id = $row.find("td").eq(0).text();
+            var idTwo = $row.find("td").eq(1).text();
+
+            if (id.indexOf(value) !== 0 && idTwo.indexOf(value) !== 0) {
+                $row.hide();
+            }
+            else {
+                $row.show();
+            }
+        }
+    });
+});
+</script>
+
+
+
+}
+else
+{
+<span>Geen Resultaten!</span>
+}

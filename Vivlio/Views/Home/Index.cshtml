@@ -1,0 +1,73 @@
+﻿
+
+@using System.Data;
+@{
+    ViewData["Title"] = "Home";
+}
+<link rel="stylesheet" href="~/js/owlcarousel/owl.carousel.min.css">
+<link rel="stylesheet" href="~/js/owlcarousel/owl.theme.default.min.css">
+
+
+
+<style>
+    .container {
+        margin-left: -12px;
+    }
+
+    .item {
+        width: 150px;
+        padding-top:20px;
+    }
+</style>
+
+<div class="text-center">
+    <div>
+        <img src="~/img/Vivlio logo.png" style="width:50%;" />
+    </div>
+    <hr class="line" />
+    <span style="color: red; display:block; padding-top:10px;">   @Html.ValidationMessage("Alert") </span>
+    <span style="color: green; display:block;"> @Html.ValidationMessage("Succes")</span>
+
+
+
+    <div class="row">
+        <div class="large-12 columns">
+            <div class="owl-carousel owl-theme" style="margin-left:10%;">
+
+                @foreach (DataRow row in Model.Rows)
+                {
+                    string ImagePath = "~/img/BookCovers/" + row[5].ToString() + ".jpg";
+                    <div class="item">
+                        <img src="@Url.Content(ImagePath)">
+                        <p style="font-size:10px; margin-top:10px;">@row[1]</p>
+                    </div>
+                }
+            </div>
+
+
+
+            <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+            <script src="~/js/owlcarousel/owl.carousel.js"></script>
+            <script>
+                $(document).ready(function () {
+                    var owl = $('.owl-carousel');
+                    owl.owlCarousel({
+                        items: 4,
+                        loop: true,
+                        margin: 10,
+                        autoplay: true,
+                        autoplayTimeout: 2000,
+                        autoplayHoverPause: true
+                    });
+                    $('.play').on('click', function () {
+                        owl.trigger('play.owl.autoplay', [1000])
+                    })
+                    $('.stop').on('click', function () {
+                        owl.trigger('stop.owl.autoplay')
+                    })
+                })
+            </script>
+        </div>
+    </div>
+</div>
+

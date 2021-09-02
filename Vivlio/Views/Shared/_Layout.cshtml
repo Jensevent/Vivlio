@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vivlio</title>
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    @{ var user = @Vivlio.Controllers.UserController.user; } 
+  
+    <div class="Alphabet">
+        <div class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="navbar-header">
+                            <button class="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                            <img class="icon" src ="~/img/Books.png"/>
+                        </div>
+
+                        <div class="navbar-collapse collapse" id="mobile_menu">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="HomeView">Home</a>
+                                </li>
+
+                                <li>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="CatalogueView">Catalogus</a>
+                                </li>
+
+                                @if (user.UserFunction != Vivlio.Enum_s.UserFunction.Member)
+                                {
+                                    <li>
+                                        <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="LendBookView">Uitlenen</a>
+                                    </li>
+
+                                    <li>
+                                        <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="ReturnBookView">Innemen</a>
+                                    </li>
+                                }
+
+                                @if (user.UserFunction == Vivlio.Enum_s.UserFunction.Admin)
+                                {
+                                    <li>
+                                        <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="ChangeUserFunctionView"> Functie wijzigen </a>
+                                    </li>
+                                }
+
+
+
+                            </ul>
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a asp-area="" asp-controller="User" asp-action="ProfileView">
+                                        <span class="glyphicon glyphicon-user"></span> @user.Name
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a asp-area="" asp-controller="User" asp-action="LoginView">
+                                        <span class="glyphicon glyphicon-log-in"></span> Uitloggen
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+        <div class="container" st>
+            <main role="main" class="pb-3">
+
+                @{ Vivlio.Tools.Databasehandler dbh = new Vivlio.Tools.Databasehandler();
+                    
+                    if(!dbh.TestCon())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Waarschuwing!</strong> Zet je vpn aan!
+                        </div>
+                    }
+                }
+
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/8730833bf7.js" crossorigin="anonymous"></script>
+</body>
+</html>

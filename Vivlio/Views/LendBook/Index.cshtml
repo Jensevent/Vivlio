@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Uitlenen";
+    var Users = Model as System.Data.DataTable;
+    var Books = ViewData["bookTable"] as System.Data.DataTable;
+}
+
+    <style>
+        .form-control {
+            width: 50%;
+        }
+    </style>
+
+<h1>Uitlenen</h1>
+
+<div id="partial"></div>
+
+<form method="post" target="_" id="form">
+
+    @{ViewData["Name"] = "User";}
+    <input type="number" id="search_@ViewData["Name"]" placeholder="GebruikersID" name="UserID" class="form-control" />
+    @{Html.RenderPartial("../Partial/Searchbar", Users); }
+
+    <br />
+
+    @{ViewData["Name"] = "Book";}
+    <input type="number" id="search_@ViewData["Name"]" placeholder="BoekID" name="BookID" class="form-control"/>
+    @{Html.RenderPartial("../Partial/Searchbar", Books); }
+
+
+    <br />
+    <button type="button" id="submit" class="btn btn-primary btn-rounded SubmitButton" style="border-radius:2rem;" >Uitlenen</button>
+
+</form>
+
+
+<script>
+    var url = '@Url.Action("LendBookResult", "Book", new { BookID = "BookID", UserID = "UserID" })';
+    $('#submit').on('click',function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data:$('form').serialize(),
+        }).done(function (r) {
+            $('#partial').html(r);
+            var frm = document.getElementById("form");
+            frm.reset();
+
+        }).fail(function (e) {
+            console.log(e.responseText);
+        });
+    });
+</script>

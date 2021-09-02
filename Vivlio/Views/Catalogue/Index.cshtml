@@ -1,0 +1,143 @@
+﻿@using System.Data
+@{
+    ViewData["Title"] = "Catalogus";
+
+    var populairBooks = ViewData["PopulairBooks"] as System.Data.DataTable;
+    @*@model System.Data.DataTable;*@
+}
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="~/css/CatalogueStyle.css" rel="stylesheet">
+        <link href="~/css/CatalogueStyle.css" rel="stylesheet">
+
+
+        <style>
+            .Alphabet {
+                overflow: scroll;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            .BookImage {
+                box-shadow: 5px 7px 10px #888888;
+            }
+        </style>
+    </head>
+
+
+<div class="container" onload="">
+    <div class="row">
+        <div class="col-sm-3 hidden-xs">
+            <div class="product-sidebar">
+                <img src="~/img/Vivlio logo.png" class="Logo"/>
+                <h3 class="text-center name">De populairste boeken:</h3>
+
+                <!-- Featured Product Item -->
+                @{ foreach (DataRow row in populairBooks.Rows) {
+                        string ImagePath = "~/img/BookCovers/" + row[2].ToString() + ".jpg";
+                    <div class="product-item">
+                        <div class="image">
+                            <img src="@Url.Content(ImagePath)" alt="@row[0].ToString()" class="BookImage">
+                        </div>
+
+                        <div class="FeatureBookTitle">
+                            <span> @row[0].ToString()</span>
+                        </div>
+
+                        <div class="FeatureBookAuthor">
+                            <span> @row[1].ToString()</span>
+                        </div>
+                    </div>
+                <!--/ Featured Product Item -->
+                    } }
+
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <br>
+            <div class="searchbar">
+                <input type="text" id="search-criteria" />
+                <button type="button" id="search" value="search" class="btn btn-primary btn-rounded" style="border-radius:2rem;">Zoeken</button>
+            </div>
+            <div class="row">
+                <!-- Product Item -->
+                <div class="product-list col-xs-12">
+
+
+                    @{foreach (DataRow row in Model.Rows)
+                        {
+                            string ImagePath = "~/img/BookCovers/" + row[5].ToString() + ".jpg";
+                            
+
+                            DateTime Date = (DateTime)row[6];
+                            <div class="product-item">
+                                <div class="image">
+                                    <img src="@Url.Content(ImagePath)" alt="@row[1].ToString()" class="BookImage">
+                                </div>
+                                <div class="caption">
+                                    <div>
+                                        <span class="BookTitle">@row[1].ToString()</span> 
+                                        <span style="font-size: 12px;"> @Date.ToShortDateString() </span>
+                                    </div>
+                                    <div class="BookAuthor">
+                                        @row[2].ToString()
+                                    </div>
+                                    <div class="description">
+                                        <p> @row[4].ToString()</p>
+                                    </div>
+
+                                    @{
+                                        if ( (bool) row[7])
+                                        {
+                                            <div>
+                                                <i class="fas fa-times red"></i>
+                                                <span> Dit boek is al uitgeleend!</span>
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div>
+                                                <i class="fas fa-check green"></i>
+                                                <span> Dit boek is nog beschikbaar! </span>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div id="NoResult"> Geen Resultaten gevonden! </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#NoResult").hide();
+    });
+
+
+    $('#search').click(function () {
+        $('.product-list .product-item').hide();
+        var txt = $('#search-criteria').val();
+        
+        $('.product-list .product-item:contains("' + txt + '")').show();
+
+        if ($(".product-list .product-item:visible").length === 0)
+            $("#NoResult").show();
+
+        else
+            $("#NoResult").hide();
+
+        if (txt == "") 
+            $('.product-list .product-item').show();
+    });
+</script>

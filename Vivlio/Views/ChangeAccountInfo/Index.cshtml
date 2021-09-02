@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Wijzig gegevens";
+
+    var user = Vivlio.Controllers.UserController.user;
+}
+
+<h1>Gegevens Wijzigen</h1>
+
+<style>
+    .form-control {
+        width: 50%;
+    }
+    .register{
+        width:50%;
+    }
+    .Alphabet{
+        height:99%;
+    }
+</style>
+
+<span style="color: red; display:block;">   @Html.ValidationMessage("Alert") </span>
+<span style="color: green; display:block;"> @Html.ValidationMessage("Succes")</span>
+
+
+
+<form asp-controller="Account" asp-action="ChangeAccountInfo">
+
+    <div class="form-label-group register" style="">
+        Je naam mag alleen letters bevatten.
+        Je gebruikersnaam moet minstens uit 4 tekens bevatten, waarvan minimaal 1 letter.
+        De email moet in het juiste format zijn en je telefoon nummer mag maximaal 10 cijfers bevatten.
+    </div>
+
+    <label for="Name">Roepnaam</label>
+    <input type="text" id="Name" name="Name" class="form-control" value="@user.Name" autofocus required>
+
+    <label for="Username">Gebruikersnaam*</label>
+    <input type="text" id="Username" name="Username" class="form-control" value="@user.Username" required>
+
+    <label for="Email">Email*</label>
+    <input type="email" id="Email" name="Email" class="form-control" value="@user.Email" required>
+
+    <label for="PhoneNumber">Telefoonnummer</label>
+    <input type="tel" id="PhoneNumber" name="PhoneNumber" class="form-control" value="@user.Phonenumber" maxlength="10">
+
+
+    <button type="submit" class="btn btn-primary btn-rounded" style="border-radius:2rem; margin-top:10px;">Verander functie</button>
+
+</form>
+<br/>
+<br/>
+
+<form asp-controller="Account" asp-action="ChangeAccountPassword">
+    <div class="form-label-group register" style="">
+        Het wachtwoord moet minstens uit 8 tekens bestaan, waarvan 1 hoofdletter en 1 cijfer.
+    </div>
+
+
+    <label for="Password">Wachtwoord</label>
+    <input type="password" id="Password" name="Password" class="form-control" required>
+
+    <label for="RepeatPassword">Herhaal het wachtwoord</label>
+    <input type="password" id="RepeatPassword" name="RepeatPassword" class="form-control" required>
+
+    <button type="submit" class="btn btn-primary btn-rounded mt-4" style="border-radius:2rem;margin-top:10px;">Wijzig wachtwoord</button>
+</form>
